@@ -1,47 +1,63 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-function Note() {
-    const [notes, setNotes] = useState([]); /** hock useState llamada notas junto con su set que permite actualizarlo */
-    const [newNote, setNewNote] = useState(""); /** hock useState llamada nueva nota junto con su set que permite actualizarlo */
+function Notas() {
+  const [notas, setNotas] = useState([]);
+  const [nuevaNota, setNuevaNota] = useState({
+    nombre: '',
+    descripcion: '',
+    valoracion: 0,
+    estado: 'Verdadero',
+  });
 
-    const addNote = () => {
-        if(newNote. trim() === "") return;
-        setNotes([...notes, newNote]);
-        setNewNote("");
-    };
+  const [mostrarTiposDeNota, setMostrarTiposDeNota] = useState(false);
 
-    const deleteNote = (index) => {  /** variable tipo objeto constante que elimina las notas */
-        const newNotes = [...notes];
-        newNotes.splice(index,1);
-        setNotes(newNotes);
-    };
+  const alternarTiposDeNota = () => {
+    setMostrarTiposDeNota(!mostrarTiposDeNota);
+  };
 
-    return (
-        <div>
-            <h2>Mis notas</h2> 
-            
-            <input
-            type = "text"
-            value = {newNote}
-            onChange= {(e) => setNewNote(e.target.value)}
-            />
+  const agregarNota = () => {
+    if (!nuevaNota.nombre.trim()) return;
 
-            <button onClick = {addNote} > agregar nueva nota</button>
-             
-            
-            <ol> 
-                
-                {notes.map((note,index) => (
-                    <li key = {index}>
-                    {note} <button onClick= {() => deleteNote(index)}>Borrar</button>
-                   </li>
-                ))}
-            </ol>
-            
-            
-        </div>
-    );
-    
+    setNotas([...notas, nuevaNota]);
+    setNuevaNota({
+      nombre: '',
+      descripcion: '',
+      valoracion: 0,
+      estado: 'Verdadero',
+    });
+  };
+
+  const eliminarNota = (index) => {
+    const nuevasNotas = [...notas];
+    nuevasNotas.splice(index, 1);
+    setNotas(nuevasNotas);
+  };
+
+  return (
+    <div>
+      <h2>Mis notas</h2>
+
+      <input
+        type="text"
+        placeholder="Nombre de la nota"
+        value={nuevaNota.nombre}
+        onChange={(e) => setNuevaNota({ ...nuevaNota, nombre: e.target.value })}
+      />
+      <button onClick={agregarNota}>Agregar nueva nota</button>
+
+      <ul>
+        {notas.map((nota, index) => (
+          <li key={index}>
+            <h3>{nota.nombre}</h3>
+            <p>Descripción: {nota.descripcion}</p>
+            <p>Valoración: {nota.valoracion}</p>
+            <p>Estado: {nota.estado}</p>
+            <button onClick={() => eliminarNota(index)}>Borrar</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default Note;
+export default Notas;
